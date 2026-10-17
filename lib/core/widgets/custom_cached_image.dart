@@ -1,0 +1,62 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+class CustomCachedImage extends StatelessWidget {
+  final String imageUrl;
+  final BoxFit fit;
+  final double? width;
+  final double? height;
+  final double iconSize;
+  final Widget? placeholder;
+  final Widget? errorWidget;
+
+  const CustomCachedImage({
+    super.key,
+    required this.imageUrl,
+    this.fit = BoxFit.cover,
+    this.width,
+    this.height,
+    this.iconSize = 32,
+    this.placeholder,
+    this.errorWidget,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (imageUrl.trim().isEmpty) {
+      return Center(
+        child: Icon(
+          CupertinoIcons.cube_box,
+          size: iconSize,
+          color: Colors.grey,
+        ),
+      );
+    }
+
+    return CachedNetworkImage(
+      imageUrl: imageUrl,
+      width: width,
+      height: height,
+      fit: fit,
+      placeholder: (context, url) =>
+      placeholder ??
+          Center(
+            child: SizedBox(
+              width: iconSize * 0.75,
+              height: iconSize * 0.75,
+              child: const CupertinoActivityIndicator(),
+            ),
+          ),
+      errorWidget: (context, url, error) =>
+      errorWidget ??
+          Center(
+            child: Icon(
+              CupertinoIcons.photo,
+              size: iconSize,
+              color: Colors.grey,
+            ),
+          ),
+    );
+  }
+}
